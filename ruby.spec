@@ -22,6 +22,9 @@ Requires:	bzip2, readline, openssl, zlib
 Requires(post):   /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
+Provides:   ruby = %{version}-%{release}
+Provides:   ruby-libs = %{version}-%{release}
+
 %description
 Ruby is the interpreted scripting language for quick and easy
 object-oriented programming.  It has many features to process text
@@ -50,8 +53,7 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fPIC" \
 %install
 rm -rf $RPM_BUILD_ROOT
 make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" DESTDIR=$RPM_BUILD_ROOT \
-     INSTALLDIRS=vendor install \
-     NO_GETTEXT=YesPlease
+     INSTALLDIRS=vendor install
 
 rm -rf $RPM_BUILD_ROOT%{_datadir}
 
