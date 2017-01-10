@@ -11,7 +11,7 @@ env:
   - secure: eQJUeGtuSCXI7A3pJAB73cr8CK4N05ZKGHk8SLedWgwTvbxWeuez0CrL42TEJs5Swyk/MGhYLqXxxBqqrMjQbMUqgObBGqg87I5nLal4RbeFTSqEvorZZ4xeoMx7q0uVlLXkqX6ho3xM7uYXN7BOkNNJm5yNUkDKKi8BZnTYMuXjC2ModHsCy9c5wQYIVYvuh27fG/wy+NJGe1nnakWFn4m8Quu4Q2zbzIww22YkFaMX0j/EDmfd2UcjgkJlJ0DYeLwXXQateMyDO7qwHEVxGKSCKCvU4GiFdyIqXAsz0nFKTC+WGeKGycKM85vJmHzqo0CIxbddG3HQsukpaBFz5AkbsGXVth8shU++0rZ7Mpr0FWQYsTbEg4gRFtQvfRSlaQ+AL+nLMptx2TUbCELyPdbwEfld8oBLKXyH2V1EXMiALBSbfO4h23QPw1eZ95G+VHmADTpKR5j/fyycEMdi4BQke50OcvTGr0VxtYj2gXf21Ad3h4TPk1+oefmDvkO+eYxLSwraQMQyvrmHqxm50cXGMlwGXoqSzjQ1cwqyM9QbmgslL7k3PXb6Fa4uUUezBrgAZMdub/msEHWv/HVod4xufLlFHpN6jRgQ7J6ZcATADc0vRENC6xl2ams4ivRHuxGMmhLPiyEJSste4MqXU7kfexOTTYvOuues3wE6pUs=
 services:
 - docker
-before_install: 
+before_install:
 - echo $passphrase | gpg --passphrase-fd 0 rpm-signing.tar.asc
 - tar xf rpm-signing.tar
 - mkdir -p $(pwd)/.gnupg && chmod 700 $(pwd)/.gnupg
@@ -26,6 +26,19 @@ script:
 - test "${TRAVIS_BRANCH}" = "master" && RELEASE_VERSION="`date +%Y%m%d%H%M`.`git rev-parse
   --short ${TRAVIS_BRANCH}`" || RELEASE_VERSION=""
 - docker run --rm=true -v $(pwd):${WORKDIR}:rw -e "RELEASE_VERSION=${RELEASE_VERSION}"
-  beol:rpm-build bash ${WORKDIR}/build.sh
+  --env-file $(pwd)/.env beol:rpm-build bash ${WORKDIR}/build.sh
 - docker run --rm=true -v $(pwd):${WORKDIR}:rw centos:${OS_TYPE}${OS_VERSION} bash
   -c "find /source -name \"*.rpm\" -type f | xargs -I{} yum -y localinstall {}"
+deploy:
+  provider: packagecloud
+  repository: centos
+  username: laksmana
+  token:
+    secure: uFdv7R3rysIYiQuHzASlz3HfataqYCW2hrWVNV9Kmtg76DwG4Nn+3ZgbL+am5YHJzFQNJTHNaQBOa/dBiN2botACZEWUM+rYgwB+n3yl1LPW19FnkqZkDDwTA/0LPfqrVFYA1Cb4BViGuhugPM1WxECp/u2LGhyRkGRQlJyy1AubtrxVMFq+gN9s1BOsgWs1U3bY1Vzc0DZwaOPf5KMRR/z5hqlCPdnERY+SYNpocxRDaGrWc6G5dNhk6PXnc6h+X1ePYoFzKzHa/gx8MrOc25EtMJrljbc+1EBKATgJQ5YejA+5DEdFyqdTxzQdMpnTNtL0ceimXkstgh2nd1anLCb5jGXCzPoxHXQKzclI+ER7c0vU9+FoScQzni7s6hE3zTd+/6AAFg9vOMEvN113RdVf6wbH0QoIi0GMtB6K9goHxqAzRxhRvCFkRjzm3PElsvRCrV9UYaxn4CRxGhsN+MZdh5ngNMewxKi58gI9KbsYYljlP3+2WksBr4Rq2cSw480ST3LvMxfN2CquUg7X92SJQ7ZrjrcgMF4TflTSu08BQqJI7yiCIN7gquq95rRZRnFben4hQ2R7h/ddfE0psAXH1RooyjRjhKCAOT0xKxnEdN1r8Uqt7SI6Nta66QMfPjImVgCFFi50tke2pgJtpf8VSq+DhU2MFanxVrQEDC4=
+  dist: el/6
+  package_glob: rpmbuild/RPMS/x86_64/*.rpm
+  skip_cleanup: true
+notifications:
+  slack:
+    rooms:
+      secure: mPkYLD05SDLriO2zUweCklsi9YPzyZBY47HLQVKN+/UDWdMYplkDCZBqK3ln32c9o+JG/E67hgoABpMwnceUXeD50qdeNhku9wXbzqe3N3ih+SphbsTpaeApAvgxqbXQffCmuA93DL6i2LSpgweIARxu6oMVuyXRJygvjHgoaxN+7qSaH+Yuwwc+TVcrUL386BA6KdKRsIhVByaqjDmfiJEL4+5nowYugIEEh8lA45SiJCp5AikyuleeqSzceuxPdh1p/1bOxTdr9dE3d6HlUMl5HumasRyUvl7O8r2MvtoJlUNFKBXs4Z9Wk/CO0BAnxKFdzyWKhgFxzcOZKl6urkLJkE81JkBwqVKMQlujUMj0jTLAt3qP3qOgE6CiTrDROgDQ66JXGEWq2jyZviZuVoP398hLGnoYmZQ/RXf8ja2yjod6DixApEGRrmcMfxoT/9dj63m5W5FX3FnGlUOGCCv4tjTZZCFzbPPRDxNGol8zfZTAULRKRBK3+45D05wG6dkBZO1ZO43yhW2YSPIc/2sPA9tDe7ouuOomoP1ioarQXcupDzaoM+KaWuVNowFzqW3ghVXpw6CSZqOMVBs5ZPQmrW56JcEJaeMqFDIbGuROsF41z7FB4amvaTeOQCIS6gP7zj8FJI0WSGz1wIgHtDTeaA8Lgm+amqlkpbg4aSo=
