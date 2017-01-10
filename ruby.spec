@@ -12,8 +12,8 @@ Release: 	%(echo ${RELEASE_VERSION:-0a})%{?dist}
 Summary:  	Core git tools
 License: 	GPL
 Group: 		Development/Tools
-URL: 		http://kernel.org/pub/software/scm/git/
-Source: 	http://kernel.org/pub/software/scm/git/%{_name}-%{version}.tar.gz
+URL:    	https://cache.ruby-lang.org/pub/ruby/
+Source: 	https://cache.ruby-lang.org/pub/ruby/%{majorver}.%{minorver}/%{_name}-%{version}.tar.gz
 BuildRequires:	automake autoconf bison gcc-c++ glibc-devel libffi-devel
 BuildRequires:	libtool m4 make openssl-devel patch perl readline-devel
 BuildRequires:	sqlite-devel zlib-devel
