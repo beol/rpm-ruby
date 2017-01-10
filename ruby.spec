@@ -1,4 +1,3 @@
-# Pass --without docs to rpmbuild if you don't want the documentation
 %global _name   ruby
 %global majorver 2
 %global minorver 3
@@ -9,10 +8,10 @@
 Name: 		%{packagename}
 Version: 	%{majorver}.%{minorver}.%{patchver}
 Release: 	%(echo ${RELEASE_VERSION:-0a})%{?dist}
-Summary:  	Core git tools
-License: 	GPL
-Group: 		Development/Tools
-URL:    	https://cache.ruby-lang.org/pub/ruby/
+Summary:  	An interpreter of object-oriented scripting language
+License: 	BSDL
+Group: 		Development/Languages
+URL:    	http://ruby-lang.org/
 Source: 	https://cache.ruby-lang.org/pub/ruby/%{majorver}.%{minorver}/%{_name}-%{version}.tar.gz
 BuildRequires:	automake autoconf bison gcc-c++ glibc-devel libffi-devel
 BuildRequires:	libtool m4 make openssl-devel patch perl readline-devel
