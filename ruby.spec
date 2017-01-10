@@ -64,10 +64,10 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig -v
+/sbin/ldconfig
 
 %postun
-/sbin/ldconfig -v
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root)
