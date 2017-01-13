@@ -9,6 +9,7 @@ RUN yum -y install \
            glibc-devel \
            libffi-devel \
            libtool \
+           libyaml-devel \
            m4 \
            make \
            openssl-devel \
@@ -22,17 +23,15 @@ RUN yum -y install \
            zlib-devel
 
 
-WORKDIR /tmp
+WORKDIR /etc/pki/rpm-gpg
 COPY RPM-GPG-KEY-laksmana .
 RUN rpm --import RPM-GPG-KEY-laksmana
-RUN rm -f RPM-GPG-KEY-laksmana
 
+WORKDIR /tmp
 ADD http://ftp.gnu.org/gnu/autoconf/autoconf-2.67.tar.gz .
 RUN tar xvzf autoconf-2.67.tar.gz
 RUN rm -f autoconf-2.67.tar.gz
-
-WORKDIR /tmp/autoconf-2.67
-RUN ./configure && make && make install
+RUN cd autoconf-2.67; ./configure && make && make install
 
 WORKDIR /
 RUN useradd -m -d /source -u 1000 rpmbuild

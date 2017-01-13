@@ -14,7 +14,7 @@ Group: 		Development/Languages
 URL:    	http://ruby-lang.org/
 Source: 	https://cache.ruby-lang.org/pub/ruby/%{majorver}.%{minorver}/%{_name}-%{version}.tar.gz
 BuildRequires:	automake autoconf bison gcc-c++ glibc-devel libffi-devel
-BuildRequires:	libtool m4 make openssl-devel patch perl readline-devel
+BuildRequires:	libtool libyaml-devel m4 make openssl-devel patch perl readline-devel
 BuildRequires:	sqlite-devel zlib-devel
 BuildRoot:	%{_tmppath}/%{_name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -39,10 +39,11 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" \
      configure
 ./configure --prefix=%{_prefix} \
             --enable-shared \
+            --disable-static \
             --disable-rpath \
             --disable-install-doc \
             --with-soname=ruby23 \
-            --without-gdbm \
+            --with-out-ext=gdbm \
             --with-out-ext=tcl \
             --with-out-ext=tk \
             --without-x11
@@ -56,6 +57,7 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" DESTDIR=$RPM_BUILD_ROOT \
      INSTALLDIRS=vendor install
 
 rm -rf $RPM_BUILD_ROOT%{_datadir}
+find $RPM_BUILD_ROOT -name libruby23-static.a -exec rm -f {} \;
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d
 cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/libruby23.conf
