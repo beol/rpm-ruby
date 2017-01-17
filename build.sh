@@ -3,7 +3,7 @@
 set -ev
 
 BASE_DIR="$(dirname $0)"
-VERSION="${1:-2.3.1}"
+VERSION="${1:-2.1.10}"
 RELEASE="${2:-0a}"
 
 cd $BASE_DIR

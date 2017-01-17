@@ -1,5 +1,5 @@
 %global _name   ruby
-%global rubyver %{?_version}%{!?_version:2.3.1}
+%global rubyver %{?_version}%{!?_version:2.1.10}
 %global rubyxver    %(echo %{rubyver} | cut -d. -f1,2)
 %global _prefix /opt/%{name}
 
@@ -76,7 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc BSDL README.md README.ja.md LEGAL GPL COPYING COPYING.ja
+%doc BSDL README README.ja LEGAL GPL COPYING COPYING.ja
 %{_prefix}
 %{_sysconfdir}/ld.so.conf.d/lib%{name}.conf
 
