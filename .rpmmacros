@@ -3,6 +3,7 @@
 %_gpg_name Leo Laksmana (RPM signing) <beol@laksmana.com>
 %_gpgbin /usr/bin/gpg
 
-%_packager Leo Laksmana <beol@laksmana.com>
+%packager Leo Laksmana <beol@laksmana.com>
+%vendor Laksmana CentOS 6 Repo
 
 %debug_package %{nil}

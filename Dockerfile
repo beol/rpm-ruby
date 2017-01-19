@@ -1,4 +1,5 @@
 FROM centos:centos6
+MAINTAINER Leo Laksmana <beol@laksmana.com>
 
 RUN yum -y install \
            automake \
@@ -10,6 +11,7 @@ RUN yum -y install \
            glibc-devel \
            libffi-devel \
            libtool \
+           libyaml \
            libyaml-devel \
            m4 \
            make \
@@ -20,7 +22,9 @@ RUN yum -y install \
            readline \
            readline-devel \
            rpm-build \
+           rpmdevtools \
            sqlite-devel \
+           vim-enhanced \
            zlib \
            zlib-devel
 

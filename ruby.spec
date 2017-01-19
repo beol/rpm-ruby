@@ -1,11 +1,11 @@
 %global _name   ruby
-%global rubyver %{_version}%{!?_version: 2.3.1}
+%global rubyver %{?_version}%{!?_version:2.3.1}
 %global rubyxver    %(echo %{rubyver} | cut -d. -f1,2)
 %global _prefix /opt/%{name}
 
 Name: 		%{_name}%(echo %{rubyxver} | sed 's,\.,,')
 Version: 	%{rubyver}
-Release: 	%{_release}%{!?_release: 0a}%{?dist}
+Release: 	%{?_release}%{!?_release:0a}%{?dist}
 Summary:  	An interpreter of object-oriented scripting language
 License: 	BSDL & GPL -- see COPYING
 Group: 		Development/Languages
@@ -20,7 +20,7 @@ Requires:	bzip2 readline openssl zlib
 Requires(post):   /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
-Provides:   ruby = %{rubyxver}
+Provides:   ruby = %{version}-%{release}
 Provides:   ruby(abi) = %{rubyxver}
 Provides:   libruby = %{version}-%{release}
 Provides:   ruby-libs = %{version}-%{release}
@@ -45,7 +45,7 @@ straight-forward, and extensible.
     --enable-shared \
     --disable-rpath \
     --disable-install-doc \
-    --with-soname=%{_name} \
+    --with-soname=%{name} \
     --without-tcl \
     --without-X11
 
@@ -58,7 +58,7 @@ make %{_smp_mflags} DESTDIR=$RPM_BUILD_ROOT \
     INSTALLDIRS=vendor install
 
 rm -rf $RPM_BUILD_ROOT%{_datadir}
-find $RPM_BUILD_ROOT -name lib%{name}-static.a -exec rm -f {} \;
+find $RPM_BUILD_ROOT%{_prefix} -name lib%{name}-static.a -exec rm -f {} \;
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d
 cat <<EOF >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/lib%{name}.conf
